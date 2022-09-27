@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-// REGISTRATION
 const register = async (userData) =>{
       const response = await axios.post('http://localhost:3003/signup', userData)
 
@@ -9,7 +8,6 @@ const register = async (userData) =>{
       }
       return response.data
 }
-// Log User
 const login = async (userData) =>{
       const response = await axios.post('http://localhost:3003/login', userData)
 
@@ -23,9 +21,33 @@ const logout = async () =>{
       localStorage.removeItem('user')
 }
 
+const getUsers = async (userData) =>{
+      const config = {
+            headers:{
+                  "x-acess-token": userData.accessToken 
+            }
+      }
+      const response = await axios.get('http://localhost:3003/users', config)
+      return response.data
+}
+
+const updateUser = async (userData) =>{
+      console.log(userData)
+      const response = await axios.put('http://localhost:3003/users/'+ userData.id, {name: userData.name, accessToken: userData.accessToken})
+      return response.data
+}
+
+const deleteUser = async (id) =>{
+      const response = await axios.delete('http://localhost:3003/users/'+ id)
+      return response.data
+}
+
 const authService = {
       register,
       login, 
-      logout
+      logout,
+      getUsers,
+      updateUser,
+      deleteUser
 }
 export default authService

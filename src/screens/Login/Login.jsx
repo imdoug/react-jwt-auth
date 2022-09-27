@@ -1,3 +1,4 @@
+import { Container, CssBaseline, TextField, Button, Typography } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -41,22 +42,47 @@ const Login = () => {
     return <p>Loading</p>
   }
   return (
-    <div>
+    <>
       <div>
-        <h2>Login</h2>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline/>
+          <Typography component="h1" variant="h5" align='center'>
+            LOGIN
+          </Typography>
+          <TextField 
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            onChange={onChange}
+            />
+          <TextField 
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={onChange}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              onClick={(e)=>{handleSubmit(e)}}
+              sx={{ mt: 3, mb: 2 }}
+            >
+              LOGIN
+            </Button>
+        </Container>
       </div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input type="email" name="email" id="email" required onChange={onChange}/>
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input type="password" name="password" id="password" required onChange={onChange} />
-      </div>
-      <div>
-        <button type="submit" onClick={(e)=>{handleSubmit(e)}}>Login</button>
-      </div>
-    </div>
+    </>
   )
 }
 

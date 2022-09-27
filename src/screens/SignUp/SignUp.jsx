@@ -1,3 +1,4 @@
+import { Container, CssBaseline, TextField, Button, Typography, FormControl,InputLabel, Select, MenuItem} from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -51,38 +52,114 @@ const SignUp = () => {
   }
 
   return (
-    <div>
+    <>
       <div>
-        <h2>Sign Up</h2>
+      <Container component="main" maxWidth="xs">
+          <CssBaseline/>
+          <Typography component="h1" variant="h5" align='center'>
+            SIGN UP
+          </Typography>
+          <TextField 
+            margin="normal"
+            required
+            fullWidth
+            id="name"
+            label="Full Name"
+            name="name"
+            autoComplete="name"
+            autoFocus
+            onChange={onChange}
+            />
+          <TextField 
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            onChange={onChange}
+            />
+          <TextField 
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={onChange}
+            />
+            <TextField 
+              margin="normal"
+              required
+              fullWidth
+              name="password2"
+              label="Password Confirmation"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              onChange={onChange}
+            />
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  label="Role"
+                  onChange={onChange}
+                >
+                  <MenuItem value={'admin'}>admin</MenuItem>
+                  <MenuItem value={'user'}>user</MenuItem>
+                </Select>
+              </FormControl>
+              <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              onClick={(e)=>{handleSubmit(e)}}
+              sx={{ mt: 3, mb: 2 }}
+            >
+              SIGN UP
+            </Button>
+        </Container>
+
       </div>
-      <div>
-        <label htmlFor="name">Name</label>
-        <input type="text" name="name" id="name" required  onChange={onChange}/>
-      </div>
-      <div>
-        <label htmlFor="email">Email</label>
-        <input type="email" name="email" id="email" required onChange={onChange}/>
-      </div>
-      <div>
-        <label htmlFor="password">Password</label>
-        <input type="password" name="password" id="password" required onChange={onChange} />
-      </div>
-      <div>
-        <label htmlFor="confPassword">Confirm Password</label>
-        <input type="password" name="password2" id="confPassword" required onChange={onChange} />
-      </div>
-      <div>
-        <label htmlFor="role">Role</label>
-        <select name="role" id="role" onChange={onChange}>
-          <option value="x"></option>
-          <option value="admin">admin</option>
-          <option value="user">user</option>
-        </select>
-      </div>
-      <div>
-        <button type="submit" onClick={(e)=>{handleSubmit(e)}}>Sign Up</button>
-      </div>
-    </div>
+    </>
+    // <div>
+    //   <div>
+    //     <h2>Sign Up</h2>
+    //   </div>
+    //   <div>
+    //     <label htmlFor="name">Name</label>
+    //     <input type="text" name="name" id="name" required  onChange={onChange}/>
+    //   </div>
+    //   <div>
+    //     <label htmlFor="email">Email</label>
+    //     <input type="email" name="email" id="email" required onChange={onChange}/>
+    //   </div>
+    //   <div>
+    //     <label htmlFor="password">Password</label>
+    //     <input type="password" name="password" id="password" required onChange={onChange} />
+    //   </div>
+    //   <div>
+    //     <label htmlFor="confPassword">Confirm Password</label>
+    //     <input type="password" name="password2" id="confPassword" required onChange={onChange} />
+    //   </div>
+    //   <div>
+    //     <label htmlFor="role">Role</label>
+    //     <select name="role" id="role" onChange={onChange}>
+    //       <option value="x"></option>
+    //       <option value="admin">admin</option>
+    //       <option value="user">user</option>
+    //     </select>
+    //   </div>
+    //   <div>
+    //     <button type="submit" onClick={(e)=>{handleSubmit(e)}}>Sign Up</button>
+    //   </div>
+    // </div>
   )
 }
 
