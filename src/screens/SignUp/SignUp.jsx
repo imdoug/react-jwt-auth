@@ -1,7 +1,7 @@
-import { Container, CssBaseline, TextField, Button, Typography, FormControl,InputLabel, Select, MenuItem} from '@mui/material'
+import { Container,  CssBaseline, TextField, Button, Typography, FormControl,InputLabel, Select, MenuItem} from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Link ,useNavigate } from 'react-router-dom'
 import { register, reset } from '../../app/features/auth/authSlice'
 
 
@@ -36,7 +36,7 @@ const SignUp = () => {
       console.log(message)
     }
     if(isSuccess || user){
-      navigate('/dashboard')
+      navigate('/')
     }
 
     dispatch(reset())
@@ -54,9 +54,9 @@ const SignUp = () => {
   return (
     <>
       <div>
-      <Container component="main" maxWidth="xs">
+      <Container component="main" maxWidth="xs" style={{marginTop: 50}}>
           <CssBaseline/>
-          <Typography component="h1" variant="h5" align='center'>
+          <Typography component="h1" variant="h2" align='center'mb={5}>
             SIGN UP
           </Typography>
           <TextField 
@@ -75,6 +75,7 @@ const SignUp = () => {
             required
             fullWidth
             id="email"
+            type={"email"}
             label="Email Address"
             name="email"
             autoComplete="email"
@@ -103,7 +104,7 @@ const SignUp = () => {
               autoComplete="current-password"
               onChange={onChange}
             />
-              <FormControl fullWidth margin="normal">
+              <FormControl fullWidth margin="normal" required>
                 <InputLabel id="demo-simple-select-label">Role</InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
@@ -124,7 +125,9 @@ const SignUp = () => {
             >
               SIGN UP
             </Button>
+            <Link to='/login' style={{color:'#1976D2'}}>Already have an account? Login</Link>
         </Container>
+
 
       </div>
     </>

@@ -1,7 +1,7 @@
 import { Container, CssBaseline, TextField, Button, Typography } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { login, reset } from '../../app/features/auth/authSlice'
 
 const Login = () => {
@@ -27,7 +27,7 @@ const Login = () => {
       console.log(message)
     }
     if(isSuccess || user){
-      navigate('/dashboard')
+      navigate('/')
     }
 
     dispatch(reset())
@@ -44,9 +44,9 @@ const Login = () => {
   return (
     <>
       <div>
-        <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs" style={{marginTop: 100}}>
           <CssBaseline/>
-          <Typography component="h1" variant="h5" align='center'>
+          <Typography component="h1" variant="h2" align='center' mb={5}>
             LOGIN
           </Typography>
           <TextField 
@@ -80,6 +80,7 @@ const Login = () => {
             >
               LOGIN
             </Button>
+            <Link to='/signup' style={{color:'#1976D2'}}>Don't have an account? Sing Up</Link>
         </Container>
       </div>
     </>
