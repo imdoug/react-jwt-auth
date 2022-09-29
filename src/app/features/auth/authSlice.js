@@ -58,8 +58,28 @@ export const updateUser = createAsyncThunk('auth/updateUser', async (user, thunk
 })
 
 export const deleteUser = createAsyncThunk('auth/deleteUser', async (id, thunkAPI)=>{
+
       try {
            return await authService.deleteUser(id) 
+      } catch (error) {
+            console.log(error)
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+            return thunkAPI.rejectWithValue(message)
+      }
+})
+export const updateUsers = createAsyncThunk('auth/updateUsers', async (user, thunkAPI)=>{
+      try {
+           return await authService.updateUsers(user) 
+      } catch (error) {
+            console.log(error)
+            const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
+            return thunkAPI.rejectWithValue(message)
+      }
+})
+
+export const deleteUsers = createAsyncThunk('auth/deleteUsers', async (id, thunkAPI)=>{
+      try {
+           return await authService.deleteUsers(id) 
       } catch (error) {
             console.log(error)
             const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
@@ -77,6 +97,9 @@ export const authSlice = createSlice({
                   state.isSuccess = false
                   state.message = ''
             },
+            cleanError: (state)=>{
+                  state.user =  null
+            }
       },
       extraReducers: (builder) =>{
             builder
@@ -139,16 +162,21 @@ export const authSlice = createSlice({
                         state.isError = false
                         state.message = action.payload
                         state.user = null
-                        console.log(action.payload)
                   })
                   .addCase(deleteUser.fulfilled, (state)=>{
                         state.isSuccess = true
                         state.user = null
                   })
-                  
-
+                  .addCase(deleteUsers.fulfilled, (state, action)=>{
+                        state.isSuccess = true
+                        state.users = action.payload
+                  })
+                  .addCase(updateUsers.fulfilled, (state, action)=>{
+                        state.isSuccess = true
+                        state.users = action.payload
+                  })
       }
 })
 
-export const { reset, updateName } = authSlice.actions
+export const { reset,  cleanError } = authSlice.actions
 export default authSlice.reducer

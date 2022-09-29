@@ -1,15 +1,15 @@
 import { Container, Grid, TextField, Button, Typography} from '@mui/material'
-import React, { useState} from 'react'
+import React, { useEffect, useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { logout, reset, getUsers, updateUser, deleteUser } from '../../app/features/auth/authSlice'
+import { logout, reset, getUsers, updateUser, updateUsers, deleteUser, deleteUsers } from '../../app/features/auth/authSlice'
 
 
 const Dashboard = () => {
   const [name, setName] = useState('')
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { user, users } = useSelector((state)=> state.auth)
+  const { user, users, isError, message } = useSelector((state)=> state.auth)
 
   const handleLogout = (e) =>{
     e.preventDefault()
@@ -40,16 +40,25 @@ const Dashboard = () => {
   const handleUpdateUsers = async (e, i)=>{
     e.preventDefault()
     const updatedUser = {
-      ...user[i], name: name
+      ...users[i], name: name
     }
-    dispatch(updateUser(users[i]))
+    dispatch(updateUsers(updatedUser))
     dispatch(reset())
     setName('')
   }
   const handleDeleteUsers = (e, i) =>{
     e.preventDefault()
-    dispatch(deleteUser(user.id))
+    dispatch(deleteUsers(users[i].id))
+    dispatch(reset())
+    setName('')
   }
+  useEffect(()=>{
+    if(isError){
+      console.log(message)
+    }
+
+    dispatch(reset())
+  }, [users, navigate, dispatch])
   return (
     <div >
       <div>
@@ -65,7 +74,6 @@ const Dashboard = () => {
             label="Update Name"
             name="name"
             autoComplete="name"
-            autoFocus
             onChange={(e)=>{setName(e.currentTarget.value)}}
             />
             <Button
@@ -124,9 +132,11 @@ const Dashboard = () => {
               <Typography component="h1" variant="h4" align='center' mt={2}>Users</Typography>
               <Container maxWidth="xl" style={{marginTop: 50}} >
               <Grid container columns={{ xs: 4, sm: 8, md: 8}} justifyContent="center" >
-                  {users.map((user, i) => (
+                  {users.map((listUser, i) => (
+                    <>
+                    {listUser.id === user.id ? <></> : 
                     <Grid item padding={5} xs={4} sm={3} md={2} key={i} mb={3} mr={3} style={{boxShadow: '0px 0px 5px 1px rgba(0,0,0,0.3)', borderRadius: 6}}>
-                      <Typography component="h1" variant="h6">{user.name}</Typography>
+                      <Typography component="h1" variant="h6">{listUser.name}</Typography>
                       <TextField 
                         margin="normal"
                         required
@@ -135,13 +145,13 @@ const Dashboard = () => {
                         label="Update Name"
                         name="name"
                         autoComplete="name"
-                        autoFocus
                         onChange={(e)=>{setName(e.currentTarget.value)}}
                         />
                         <Button
                           type="submit"
                           fullWidth
                           variant="contained"
+                          value={name}
                           onClick={(e)=>{handleUpdateUsers(e, i)}}
                           sx={{ mt: 3, mb: 2 }}
                         >
@@ -157,8 +167,8 @@ const Dashboard = () => {
                         >
                           DELETE
                         </Button>
-                    </Grid>
-                  ))}
+                    </Grid>}
+                  </>))}
                 </Grid>
               </Container>
             </div>

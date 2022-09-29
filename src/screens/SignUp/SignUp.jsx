@@ -1,11 +1,13 @@
-import { Container,  CssBaseline, TextField, Button, Typography, FormControl,InputLabel, Select, MenuItem} from '@mui/material'
+import { Container, Alert,  CssBaseline, TextField, Button, Typography, FormControl,InputLabel, Select, MenuItem} from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link ,useNavigate } from 'react-router-dom'
-import { register, reset } from '../../app/features/auth/authSlice'
+import { register, reset, cleanError } from '../../app/features/auth/authSlice'
 
 
 const SignUp = () => {
+  const [passError, setPassError] = useState(false)
+  const [error, setError] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,25 +20,54 @@ const SignUp = () => {
   const dispatch = useDispatch()
   const { user, isLoading, isError, isSuccess, message } = useSelector((state)=>state.auth)
 
+  const validateEmail = (email) =>{
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
   const handleSubmit = (e) =>{
     e.preventDefault()
-    console.log(formData)
-    if(password !== password2){
-      console.log('password doesnt match')
+
+    if(formData.password === '' || formData.email === '' || formData.role === '' || formData.name === ''){
+      setError(true)
+      setTimeout(()=>{
+        setError(false)
+      }, 3000)
     }else{
-      const userData = {
-        name, email, password, role
+      if(!validateEmail(formData.email)){
+        setError(true)
+        setTimeout(()=>{
+          setError(false)
+      }, 3000)
+      }else{
+        if(password !== password2){
+          setPassError(true)
+          setTimeout(()=>{
+            setPassError(false)
+          }, 3000)
+        }else{
+          const userData = {
+            name, email, password, role
+          }
+          dispatch(register(userData))
+        }
       }
-      dispatch(register(userData))
     }
-    console.log()
   }
   useEffect(()=>{
     if(isError){
       console.log(message)
     }
-    if(isSuccess || user){
-      navigate('/')
+    if(user === 'user not found'){
+      setError(true)
+      setTimeout(()=>{
+        setError(false)
+        dispatch(cleanError())
+        localStorage.removeItem('user')
+      }, 3000)
+    }else{
+      if(isSuccess || user){
+        navigate('/')
+      }
     }
 
     dispatch(reset())
@@ -59,6 +90,18 @@ const SignUp = () => {
           <Typography component="h1" variant="h2" align='center'mb={5}>
             SIGN UP
           </Typography>
+          {error ? 
+        <>
+          <Alert variant="outlined" severity="error">
+              one or more fields are missing, check it out!
+          </Alert>
+        </> : <></>}
+        {passError ? 
+        <>
+          <Alert variant="outlined" severity="error">
+              passwords dont match! check them out!
+          </Alert>
+        </> : <></>}
           <TextField 
             margin="normal"
             required
@@ -95,7 +138,7 @@ const SignUp = () => {
             />
             <TextField 
               margin="normal"
-              required
+              aria-required
               fullWidth
               name="password2"
               label="Password Confirmation"
@@ -110,8 +153,8 @@ const SignUp = () => {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Role"
-                  onChange={onChange}
-                >
+                  name="role"
+                  onChange={onChange} >
                   <MenuItem value={'admin'}>admin</MenuItem>
                   <MenuItem value={'user'}>user</MenuItem>
                 </Select>
@@ -131,38 +174,6 @@ const SignUp = () => {
 
       </div>
     </>
-    // <div>
-    //   <div>
-    //     <h2>Sign Up</h2>
-    //   </div>
-    //   <div>
-    //     <label htmlFor="name">Name</label>
-    //     <input type="text" name="name" id="name" required  onChange={onChange}/>
-    //   </div>
-    //   <div>
-    //     <label htmlFor="email">Email</label>
-    //     <input type="email" name="email" id="email" required onChange={onChange}/>
-    //   </div>
-    //   <div>
-    //     <label htmlFor="password">Password</label>
-    //     <input type="password" name="password" id="password" required onChange={onChange} />
-    //   </div>
-    //   <div>
-    //     <label htmlFor="confPassword">Confirm Password</label>
-    //     <input type="password" name="password2" id="confPassword" required onChange={onChange} />
-    //   </div>
-    //   <div>
-    //     <label htmlFor="role">Role</label>
-    //     <select name="role" id="role" onChange={onChange}>
-    //       <option value="x"></option>
-    //       <option value="admin">admin</option>
-    //       <option value="user">user</option>
-    //     </select>
-    //   </div>
-    //   <div>
-    //     <button type="submit" onClick={(e)=>{handleSubmit(e)}}>Sign Up</button>
-    //   </div>
-    // </div>
   )
 }
 

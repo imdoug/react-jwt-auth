@@ -1,10 +1,11 @@
-import { Container, CssBaseline, TextField, Button, Typography } from '@mui/material'
+import { Container, CssBaseline, Alert, TextField, Button, Typography } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { login, reset } from '../../app/features/auth/authSlice'
+import { login, reset, cleanError } from '../../app/features/auth/authSlice'
 
 const Login = () => {
+  const [error, setError] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -14,22 +15,49 @@ const Login = () => {
   const dispatch = useDispatch()
   const { user, isLoading, isError, isSuccess, message } = useSelector((state)=>state.auth)
 
+  const validateEmail = (email) =>{
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+
   const handleSubmit = (e) =>{
     e.preventDefault()
-    console.log(formData)
-      const userData = {
-         email, password
+    console.log(validateEmail(email))
+    if(!validateEmail(email)){
+      setError(true)
+      setTimeout(()=>{
+        setError(false)
+    }, 3000)
+    }else{
+      if(formData.password === '' || formData.email === ''){
+        setError(true)
+        setTimeout(()=>{
+          setError(false)
+        }, 3000)
+      }else{
+        const userData = {
+          email, password
+       }
+       dispatch(login(userData))
       }
-      dispatch(login(userData))
+    }
   }
   useEffect(()=>{
     if(isError){
       console.log(message)
     }
-    if(isSuccess || user){
-      navigate('/')
+    if(user === 'user not found'){
+      setError(true)
+      setTimeout(()=>{
+        setError(false)
+        dispatch(cleanError())
+        localStorage.removeItem('user')
+      }, 3000)
+    }else{
+      if(isSuccess || user){
+        navigate('/')
+      }
     }
-
     dispatch(reset())
   }, [user, isError, isSuccess, message, navigate, dispatch])
   const onChange = (e) =>{
@@ -49,6 +77,12 @@ const Login = () => {
           <Typography component="h1" variant="h2" align='center' mb={5}>
             LOGIN
           </Typography>
+          {error ? 
+        <>
+          <Alert variant="outlined" severity="error">
+              email or password not valid, check your credentials
+          </Alert>
+        </> : <></>}
           <TextField 
             margin="normal"
             required
