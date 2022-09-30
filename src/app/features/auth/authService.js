@@ -1,15 +1,20 @@
 import axios from 'axios'
 
 const register = async (userData) =>{
-      const response = await axios.post('http://localhost:3003/signup', userData)
-
-      if(response.data){
-            localStorage.setItem('user', JSON.stringify(response.data))
+      try {
+            const response = await axios.post(`${process.env.REACT_APP_PUBLIC_URL}signup`, userData)
+            console.log(response)
+            if(response.data){
+                  localStorage.setItem('user', JSON.stringify(response.data))
+            }
+            return response.data
+      } catch (error) {
+            console.log(error.response.data)
+            return null
       }
-      return response.data
 }
 const login = async (userData) =>{
-      const response = await axios.post('http://localhost:3003/login', userData)
+      const response = await axios.post(`${process.env.REACT_APP_PUBLIC_URL}login`, userData)
 
       if(response.data){
             localStorage.setItem('user', JSON.stringify(response.data))
@@ -27,27 +32,27 @@ const getUsers = async (userData) =>{
                   "x-acess-token": userData.accessToken 
             }
       }
-      const response = await axios.get('http://localhost:3003/users', config)
+      const response = await axios.get(`${process.env.REACT_APP_PUBLIC_URL}users`, config)
       return response.data
 }
 
 const updateUser = async (userData) =>{
       console.log(userData)
-      const response = await axios.put('http://localhost:3003/user/'+ userData.id, {name: userData.name, accessToken: userData.accessToken})
+      const response = await axios.put(`${process.env.REACT_APP_PUBLIC_URL}user/`+ userData.id, {name: userData.name, accessToken: userData.accessToken})
       return response.data
 }
 
 const deleteUser = async (id) =>{
-      const response = await axios.delete('http://localhost:3003/user/'+ id)
+      const response = await axios.delete(`${process.env.REACT_APP_PUBLIC_URL}user/`+ id)
       return response.data
 }
 const updateUsers = async (userData) =>{
-      const response = await axios.put('http://localhost:3003/users/'+ userData.id, {name: userData.name})
+      const response = await axios.put(`${process.env.REACT_APP_PUBLIC_URL}users/`+ userData.id, {name: userData.name})
       return response.data
 }
 
 const deleteUsers = async (id) =>{
-      const response = await axios.delete('http://localhost:3003/users/'+ id)
+      const response = await axios.delete(`${process.env.REACT_APP_PUBLIC_URL}users/`+ id)
       return response.data
 }
 

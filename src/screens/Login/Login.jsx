@@ -54,6 +54,15 @@ const Login = () => {
         localStorage.removeItem('user')
       }, 3000)
     }else{
+      if(user === ''){
+        dispatch(cleanError())
+        setError(true)
+        setTimeout(()=>{
+          setError(false)
+          dispatch(cleanError())
+          localStorage.removeItem('user')
+        }, 5000)
+      }
       if(isSuccess || user){
         navigate('/')
       }

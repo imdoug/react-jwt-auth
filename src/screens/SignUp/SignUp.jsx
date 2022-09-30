@@ -122,7 +122,6 @@ const SignUp = () => {
             label="Email Address"
             name="email"
             autoComplete="email"
-            autoFocus
             onChange={onChange}
             />
           <TextField 

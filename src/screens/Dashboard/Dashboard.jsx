@@ -2,7 +2,7 @@ import { Container, Grid, TextField, Button, Typography} from '@mui/material'
 import React, { useEffect, useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { logout, reset, getUsers, updateUser, updateUsers, deleteUser, deleteUsers } from '../../app/features/auth/authSlice'
+import { logout, reset, cleanError, getUsers, updateUser, updateUsers, deleteUser, deleteUsers } from '../../app/features/auth/authSlice'
 
 
 const Dashboard = () => {
@@ -36,15 +36,16 @@ const Dashboard = () => {
     dispatch(reset())
     setName('')
   }
-  // finish this functions 
   const handleUpdateUsers = async (e, i)=>{
     e.preventDefault()
-    const updatedUser = {
-      ...users[i], name: name
+    if(name !== ''){
+      const updatedUser = {
+        ...users[i], name: name
+      }
+      dispatch(updateUsers(updatedUser))
+      dispatch(reset())
+      setName('')
     }
-    dispatch(updateUsers(updatedUser))
-    dispatch(reset())
-    setName('')
   }
   const handleDeleteUsers = (e, i) =>{
     e.preventDefault()
@@ -58,7 +59,7 @@ const Dashboard = () => {
     }
 
     dispatch(reset())
-  }, [users, navigate, dispatch])
+  }, [users, user, navigate, dispatch])
   return (
     <div >
       <div>

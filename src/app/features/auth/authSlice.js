@@ -123,7 +123,7 @@ export const authSlice = createSlice({
                   .addCase(login.fulfilled, (state, action)=>{
                         state.isLoading = false
                         state.isSuccess = true
-                        state.user = action.payload
+                        state.user = action.payload  
                   })
                   .addCase(login.rejected, (state, action)=>{
                         state.isLoading = false
@@ -133,6 +133,7 @@ export const authSlice = createSlice({
                   })
                   .addCase(logout.fulfilled, (state)=>{
                         state.user = null
+                        state.users = []
                   })
                   .addCase(getUsers.pending, (state)=>{
                         state.isLoading  = true
